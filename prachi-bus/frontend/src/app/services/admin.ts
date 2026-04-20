@@ -7,7 +7,7 @@ import { AuthService } from './auth';
 export class AdminService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private base = 'http://localhost:5001/api/admin';
+  private base = 'https://your-backend.vercel.app/api/admin';
 
   private get h() {
     return new HttpHeaders().set('x-auth-token', this.auth.token() || '');

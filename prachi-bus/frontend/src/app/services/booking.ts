@@ -28,7 +28,7 @@ export interface BookingData {
 export class BookingService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'http://localhost:5001/api/bookings';
+  private apiUrl = 'https://your-backend.vercel.app/api/bookings';
   bookingData = signal<BookingData | null>(null);
 
   setBookingData(data: BookingData) {
