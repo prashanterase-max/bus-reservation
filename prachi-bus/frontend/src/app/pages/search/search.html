@@ -1,0 +1,110 @@
+<div class="max-w-6xl mx-auto py-8 px-4">
+  <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border">
+    <div>
+      <h1 class="text-xl font-bold">{{ source }} to {{ destination }}</h1>
+      <p class="text-gray-600">{{ date }} | {{ busService.buses().length }} Buses found</p>
+    </div>
+    <button class="text-primary font-bold" routerLink="/">Modify Search</button>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Filters -->
+    <div class="lg:col-span-1 space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border">
+        <h3 class="font-bold mb-4 border-b pb-2">Filters</h3>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Bus Type</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-gray-700">
+              <input type="checkbox" class="accent-primary"> AC
+            </label>
+            <label class="flex items-center gap-2 text-gray-700">
+              <input type="checkbox" class="accent-primary"> Non-AC
+            </label>
+            <label class="flex items-center gap-2 text-gray-700">
+              <input type="checkbox" class="accent-primary"> Sleeper
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Departure Time</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-gray-700 text-sm">
+              <input type="checkbox" class="accent-primary"> Before 10 AM
+            </label>
+            <label class="flex items-center gap-2 text-gray-700 text-sm">
+              <input type="checkbox" class="accent-primary"> 10 AM - 5 PM
+            </label>
+            <label class="flex items-center gap-2 text-gray-700 text-sm">
+              <input type="checkbox" class="accent-primary"> After 5 PM
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bus List -->
+    <div class="lg:col-span-3 space-y-4">
+      <div *ngIf="busService.loading()" class="text-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <p class="mt-4 text-gray-600">Finding best buses for you...</p>
+      </div>
+
+      <div *ngIf="!busService.loading() && busService.buses().length === 0" class="bg-white p-12 text-center rounded-xl shadow-sm border">
+        <p class="text-gray-600 text-lg">No buses found for this route on the selected date.</p>
+        <button class="mt-4 text-primary font-bold" routerLink="/">Try another search</button>
+      </div>
+
+      <div *ngFor="let bus of busService.buses()" class="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:border-primary transition-all duration-300 transform hover:-translate-y-1 overflow-hidden animate-slide-up">
+        <div class="p-8 flex flex-wrap gap-8 items-center">
+          <div class="flex-1 min-w-[240px]">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="text-2xl font-black text-gray-800 tracking-tight">{{ bus.name }}</h3>
+              <span class="px-2 py-1 bg-rose-50 text-primary text-[10px] font-black rounded uppercase tracking-widest">{{ bus.type }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex items-center bg-green-500 text-white text-xs font-black px-2 py-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                {{ bus.rating }}
+              </div>
+              <span class="text-xs text-gray-400 font-bold uppercase tracking-widest">{{ bus.reviewsCount }} reviews</span>
+            </div>
+          </div>
+
+          <div class="flex-1 flex justify-between items-center text-center px-8 border-x border-gray-50">
+            <div>
+              <div class="text-2xl font-black text-gray-800">{{ bus.departureTime }}</div>
+              <div class="text-xs text-gray-400 font-bold uppercase tracking-widest">{{ bus.source }}</div>
+            </div>
+            <div class="px-6 flex-1 flex flex-col items-center">
+              <div class="text-[10px] font-black text-gray-300 uppercase tracking-tighter mb-1">{{ bus.duration }}</div>
+              <div class="h-[2px] bg-gray-100 w-full relative">
+                <div class="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full"></div>
+              </div>
+            </div>
+            <div>
+              <div class="text-2xl font-black text-gray-800">{{ bus.arrivalTime }}</div>
+              <div class="text-xs text-gray-400 font-bold uppercase tracking-widest">{{ bus.destination }}</div>
+            </div>
+          </div>
+
+          <div class="text-right min-w-[180px]">
+            <div class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Fare starts from</div>
+            <div class="text-3xl font-black text-gray-800 mb-4">₹{{ bus.fare }}</div>
+            <button 
+              (click)="selectBus(bus._id)"
+              class="w-full bg-primary text-white py-3 rounded-xl font-black hover:bg-rose-700 transition-all shadow-lg hover:shadow-rose-200 transform hover:-translate-y-1 active:translate-y-0"
+            >
+              SELECT SEATS
+            </button>
+            <div class="text-[10px] text-rose-500 font-black uppercase tracking-widest mt-2">{{ bus.seatsAvailable }} seats left</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

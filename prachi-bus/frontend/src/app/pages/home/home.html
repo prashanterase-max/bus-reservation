@@ -1,0 +1,164 @@
+<div class="min-h-screen overflow-hidden">
+  <!-- Hero Section -->
+  <div class="relative bg-primary text-white py-24 px-4">
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+    
+    <div class="max-w-6xl mx-auto text-center relative z-10">
+      <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tighter animate-fade-in">
+        Travel with <span class="text-rose-200">Confidence.</span>
+      </h1>
+      <p class="text-xl md:text-2xl mb-12 text-rose-100 font-medium animate-slide-up opacity-0" style="animation-delay: 0.2s">
+        Premium bus services at your fingertips.
+      </p>
+
+      <!-- Search Box -->
+      <div class="bg-white p-8 rounded-3xl shadow-2xl flex flex-wrap gap-6 items-end text-gray-800 animate-slide-up opacity-0" style="animation-delay: 0.4s">
+        <div class="flex-1 min-w-[240px] text-left group">
+          <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2 group-hover:text-primary transition-colors">From</label>
+          <div class="relative">
+            <input 
+              type="text" 
+              [(ngModel)]="source" 
+              placeholder="Source City"
+              class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:border-primary focus:bg-white outline-none transition-all font-bold text-lg"
+            >
+          </div>
+        </div>
+        <div class="flex-1 min-w-[240px] text-left group">
+          <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2 group-hover:text-primary transition-colors">To</label>
+          <div class="relative">
+            <input 
+              type="text" 
+              [(ngModel)]="destination" 
+              placeholder="Destination City"
+              class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:border-primary focus:bg-white outline-none transition-all font-bold text-lg"
+            >
+          </div>
+        </div>
+        <div class="flex-1 min-w-[240px] text-left group">
+          <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2 group-hover:text-primary transition-colors">Date</label>
+          <div class="relative">
+            <input 
+              type="date" 
+              [(ngModel)]="date"
+              class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:border-primary focus:bg-white outline-none transition-all font-bold text-lg"
+            >
+          </div>
+        </div>
+        <button 
+          (click)="onSearch()"
+          class="bg-primary text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-rose-700 transition-all shadow-lg hover:shadow-rose-200 transform hover:-translate-y-1 active:translate-y-0 h-[68px]"
+        >
+          SEARCH BUSES
+        </button>
+      </div>
+      <div *ngIf="errors()" class="mt-3 text-rose-200 text-sm font-semibold text-center">
+        ⚠ {{ errors() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="bg-white py-12 border-b">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="animate-fade-in opacity-0" style="animation-delay: 0.6s">
+        <div class="text-3xl font-black text-primary">10M+</div>
+        <div class="text-sm text-gray-500 font-bold uppercase tracking-widest">Happy Travelers</div>
+      </div>
+      <div class="animate-fade-in opacity-0" style="animation-delay: 0.7s">
+        <div class="text-3xl font-black text-primary">5000+</div>
+        <div class="text-sm text-gray-500 font-bold uppercase tracking-widest">Daily Buses</div>
+      </div>
+      <div class="animate-fade-in opacity-0" style="animation-delay: 0.8s">
+        <div class="text-3xl font-black text-primary">100+</div>
+        <div class="text-sm text-gray-500 font-bold uppercase tracking-widest">Cities Covered</div>
+      </div>
+      <div class="animate-fade-in opacity-0" style="animation-delay: 0.9s">
+        <div class="text-3xl font-black text-primary">4.8/5</div>
+        <div class="text-sm text-gray-500 font-bold uppercase tracking-widest">User Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Routes -->
+  <div class="max-w-6xl mx-auto py-24 px-4">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2 class="text-4xl font-black text-gray-800 tracking-tight">Popular Routes</h2>
+        <p class="text-gray-500 mt-2 font-medium">Most traveled destinations this month</p>
+      </div>
+      <button class="text-primary font-bold hover:underline">View All Routes →</button>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div (click)="searchPopularRoute('Ahmedabad', 'Mumbai')" class="group bg-white p-8 rounded-3xl shadow-sm border-2 border-transparent hover:border-primary hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
+        <div class="flex justify-between items-center mb-4">
+          <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
+          <div class="text-sm font-black text-primary bg-rose-50 px-3 py-1 rounded-full">TOP RATED</div>
+        </div>
+        <div class="font-black text-2xl text-gray-800 mb-2">Ahmedabad → Mumbai</div>
+        <div class="text-gray-500 font-medium">Starting from <span class="text-primary font-black">₹800</span></div>
+      </div>
+
+      <div (click)="searchPopularRoute('Mumbai', 'Pune')" class="group bg-white p-8 rounded-3xl shadow-sm border-2 border-transparent hover:border-primary hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
+        <div class="flex justify-between items-center mb-4">
+          <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
+        </div>
+        <div class="font-black text-2xl text-gray-800 mb-2">Mumbai → Pune</div>
+        <div class="text-gray-500 font-medium">Starting from <span class="text-primary font-black">₹400</span></div>
+      </div>
+
+      <div (click)="searchPopularRoute('Surat', 'Ahmedabad')" class="group bg-white p-8 rounded-3xl shadow-sm border-2 border-transparent hover:border-primary hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
+        <div class="flex justify-between items-center mb-4">
+          <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
+        </div>
+        <div class="font-black text-2xl text-gray-800 mb-2">Surat → Ahmedabad</div>
+        <div class="text-gray-500 font-medium">Starting from <span class="text-primary font-black">₹500</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offers Section -->
+  <div class="bg-gray-50 py-24 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-black text-gray-800">Special Offers</h2>
+        <p class="text-gray-500 mt-2 font-medium">Grab the best deals on your next trip</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="group bg-gradient-to-br from-rose-500 to-rose-700 text-white p-10 rounded-[2.5rem] relative overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02]">
+          <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-white opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+          <div class="relative z-10">
+            <div class="text-xs font-black tracking-widest uppercase mb-4 opacity-80">First Booking Offer</div>
+            <h3 class="text-4xl font-black mb-4 leading-tight">Save up to ₹200 <br> on your journey</h3>
+            <p class="mb-8 text-rose-100 font-medium text-lg">Use code: <span class="bg-white text-primary px-3 py-1 rounded-lg font-black mx-1">PRACHI200</span></p>
+            <button class="bg-white text-primary px-8 py-3 rounded-2xl font-black hover:bg-rose-50 transition-colors shadow-lg">BOOK NOW</button>
+          </div>
+        </div>
+
+        <div class="group bg-gradient-to-br from-blue-500 to-blue-700 text-white p-10 rounded-[2.5rem] relative overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02]">
+          <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-white opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+          <div class="relative z-10">
+            <div class="text-xs font-black tracking-widest uppercase mb-4 opacity-80">Referral Program</div>
+            <h3 class="text-4xl font-black mb-4 leading-tight">Refer & Earn <br> Travel Credits</h3>
+            <p class="mb-8 text-blue-100 font-medium text-lg">Earn ₹100 for every friend you refer</p>
+            <button class="bg-white text-blue-700 px-8 py-3 rounded-2xl font-black hover:bg-blue-50 transition-colors shadow-lg">REFER NOW</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

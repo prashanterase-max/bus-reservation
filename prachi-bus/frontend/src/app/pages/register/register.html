@@ -1,0 +1,101 @@
+<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100 transform transition-all hover:scale-[1.01] duration-300">
+    <div class="text-center">
+      <h2 class="mt-6 text-3xl font-extrabold text-gray-900 animate-fade-in">
+        Create Account
+      </h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Join Prachi Bus for easy bookings
+      </p>
+    </div>
+
+    <div *ngIf="error()" class="bg-rose-50 border-l-4 border-rose-500 p-4 animate-shake">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-rose-700">{{ error() }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="mt-8 space-y-6" (ngSubmit)="onRegister()">
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input 
+            id="name" 
+            name="name" 
+            type="text" 
+            [(ngModel)]="name"
+            required 
+            class="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm transition-all duration-200 hover:border-primary" 
+            placeholder="Full Name"
+          >
+        </div>
+        <div>
+          <label for="email-address" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+          <input 
+            id="email-address" 
+            name="email" 
+            type="email" 
+            [(ngModel)]="email"
+            required 
+            class="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm transition-all duration-200 hover:border-primary" 
+            placeholder="Email address"
+          >
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input 
+            id="phone" 
+            name="phone" 
+            type="text" 
+            [(ngModel)]="phone"
+            required 
+            class="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm transition-all duration-200 hover:border-primary" 
+            placeholder="Phone Number"
+          >
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input 
+            id="password" 
+            name="password" 
+            type="password" 
+            [(ngModel)]="password"
+            required 
+            class="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm transition-all duration-200 hover:border-primary" 
+            placeholder="Password"
+          >
+        </div>
+      </div>
+
+      <div>
+        <button 
+          type="submit" 
+          [disabled]="loading()"
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-primary hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="loading()" class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+          {{ loading() ? 'Creating account...' : 'Register' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center">
+      <p class="text-sm text-gray-600">
+        Already have an account? 
+        <a routerLink="/login" class="font-medium text-primary hover:text-rose-700 transition-colors"> Sign in </a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="max-w-6xl mx-auto py-12 px-4">
+  <div class="mb-12">
+    <h1 class="text-4xl font-bold text-gray-800">Welcome, {{ user()?.name }}!</h1>
+    <p class="text-gray-600 mt-2">Here is your dashboard.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-1">
+      <div class="bg-white p-6 rounded-xl shadow-sm border">
+        <h3 class="font-bold mb-4 border-b pb-2">Your Details</h3>
+        <div class="space-y-2">
+          <div>
+            <label class="text-sm font-medium text-gray-500">Name</label>
+            <p class="font-bold text-gray-800">{{ user()?.name }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-500">Email</label>
+            <p class="font-bold text-gray-800">{{ user()?.email }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-500">Phone</label>
+            <p class="font-bold text-gray-800">{{ user()?.phone }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2">
+      <h3 class="font-bold mb-4">Your Bookings</h3>
+      <div *ngIf="loading()" class="flex justify-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+
+      <div *ngIf="!loading() && bookings().length === 0" class="bg-white p-12 text-center rounded-xl shadow-sm border">
+        <p class="text-gray-600 text-lg">You have no bookings yet.</p>
+        <button routerLink="/" class="mt-4 text-primary font-bold">Book a ticket now</button>
+      </div>
+
+      <div *ngIf="!loading() && bookings().length > 0" class="space-y-4">
+        <div *ngFor="let booking of bookings()" class="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow overflow-hidden">
+          <div class="p-6 flex flex-wrap gap-6 items-center">
+            <div class="flex-1 min-w-[200px]">
+              <h3 class="text-xl font-bold text-gray-800">{{ booking.bus.name }}</h3>
+              <p class="text-sm text-gray-500">{{ booking.bus.source }} to {{ booking.bus.destination }}</p>
+              <p class="text-sm text-gray-500">PNR: {{ booking.pnr }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold text-primary">₹{{ booking.totalAmount }}</p>
+              <p class="text-sm text-gray-500">{{ booking.bookingDate | date:'medium' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Available Buses Section -->
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Available Buses</h2>
+
+    <div *ngIf="busService.loading()" class="flex justify-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+
+    <div *ngIf="!busService.loading() && busService.buses().length === 0" class="bg-white p-12 text-center rounded-xl shadow-sm border">
+      <p class="text-gray-500 text-lg">No buses available at the moment.</p>
+    </div>
+
+    <div *ngIf="!busService.loading() && busService.buses().length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div *ngFor="let bus of busService.buses()" class="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-primary transition-all duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-black text-gray-800">{{ bus.name }}</h3>
+            <span class="px-2 py-1 bg-rose-50 text-primary text-[10px] font-black rounded uppercase tracking-widest">{{ bus.type }}</span>
+          </div>
+
+          <div class="flex items-center gap-2 mb-4">
+            <div class="flex items-center bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              {{ bus.rating }}
+            </div>
+            <span class="text-xs text-gray-400 font-bold">{{ bus.reviewsCount }} reviews</span>
+          </div>
+
+          <div class="flex justify-between items-center text-center mb-4">
+            <div>
+              <div class="text-xl font-black text-gray-800">{{ bus.departureTime }}</div>
+              <div class="text-xs text-gray-400 font-bold uppercase">{{ bus.source }}</div>
+            </div>
+            <div class="flex-1 px-4 flex flex-col items-center">
+              <div class="text-[10px] text-gray-300 font-bold uppercase mb-1">{{ bus.duration }}</div>
+              <div class="h-[2px] bg-gray-100 w-full relative">
+                <div class="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full"></div>
+              </div>
+            </div>
+            <div>
+              <div class="text-xl font-black text-gray-800">{{ bus.arrivalTime }}</div>
+              <div class="text-xs text-gray-400 font-bold uppercase">{{ bus.destination }}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+            <div>
+              <div class="text-xs text-gray-400 font-bold uppercase">Fare</div>
+              <div class="text-2xl font-black text-gray-800">₹{{ bus.fare }}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-400 font-bold uppercase">Seats Left</div>
+              <div class="text-lg font-black" [class.text-green-600]="bus.seatsAvailable > 10" [class.text-orange-500]="bus.seatsAvailable <= 10 && bus.seatsAvailable > 0" [class.text-red-500]="bus.seatsAvailable === 0">
+                {{ bus.seatsAvailable }}
+              </div>
+            </div>
+            <a [routerLink]="['/seat-selection', bus._id]" class="bg-primary text-white px-5 py-2 rounded-xl font-black hover:bg-rose-700 transition-all shadow hover:shadow-rose-200">
+              Book Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

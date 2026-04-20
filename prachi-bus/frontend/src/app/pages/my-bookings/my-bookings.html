@@ -1,0 +1,86 @@
+<div class="max-w-6xl mx-auto py-12 px-4">
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-gray-800 animate-fade-in">My Bookings</h1>
+    <p class="text-gray-600 mt-2">Manage and view all your bus travel history</p>
+  </div>
+
+  <div *ngIf="loading()" class="flex justify-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+
+  <div *ngIf="!loading() && bookings().length === 0" class="bg-white p-20 text-center rounded-2xl shadow-sm border animate-fade-in">
+    <div class="w-24 h-24 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    </div>
+    <h3 class="text-xl font-bold text-gray-800 mb-2">No bookings found</h3>
+    <p class="text-gray-600 mb-8">You haven't booked any bus tickets yet.</p>
+    <button routerLink="/" class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-rose-700 transition-all transform hover:scale-105 active:scale-95">
+      BOOK A TICKET NOW
+    </button>
+  </div>
+
+  <div *ngIf="!loading() && bookings().length > 0" class="space-y-6">
+    <div *ngFor="let booking of bookings()" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transform transition-all hover:shadow-lg hover:-translate-y-1 duration-300 animate-slide-up">
+      <div class="flex flex-wrap">
+        <!-- Ticket Header -->
+        <div class="w-full bg-gray-50 px-6 py-4 flex justify-between items-center border-b border-gray-100">
+          <div class="flex items-center gap-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-gray-400">PNR: {{ booking.pnr }}</span>
+            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">{{ booking.status }}</span>
+          </div>
+          <span class="text-sm text-gray-500">Booked on {{ booking.bookingDate | date:'mediumDate' }}</span>
+        </div>
+
+        <!-- Ticket Body -->
+        <div class="p-6 flex-1 min-w-[300px]">
+          <div class="flex justify-between items-center mb-6">
+            <div class="flex-1">
+              <div class="text-2xl font-bold text-gray-800">{{ booking.bus.source }}</div>
+              <div class="text-sm text-gray-400">{{ booking.bus.departureTime }}</div>
+            </div>
+            <div class="px-8 flex-1 flex items-center justify-center relative">
+              <div class="h-[2px] bg-gray-100 w-full relative">
+                <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-white px-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 text-right">
+              <div class="text-2xl font-bold text-gray-800">{{ booking.bus.destination }}</div>
+              <div class="text-sm text-gray-400">{{ booking.bus.arrivalTime }}</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-gray-50">
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold mb-1">Bus</div>
+              <div class="font-bold text-gray-700">{{ booking.bus.name }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold mb-1">Seats</div>
+              <div class="font-bold text-gray-700">{{ booking.selectedSeats.join(', ') }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold mb-1">Date</div>
+              <div class="font-bold text-gray-700">{{ booking.journeyDate | date:'mediumDate' }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold mb-1">Amount</div>
+              <div class="font-bold text-primary">₹{{ booking.totalAmount }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticket Actions -->
+        <div class="p-6 bg-gray-50/50 flex flex-col justify-center border-l border-gray-100 min-w-[200px]">
+          <button class="w-full bg-white text-gray-700 py-2 rounded-lg font-bold border hover:bg-gray-100 transition-colors mb-2 text-sm">VIEW DETAILS</button>
+          <button class="w-full bg-white text-rose-500 py-2 rounded-lg font-bold border border-rose-100 hover:bg-rose-50 transition-colors text-sm">CANCEL TICKET</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

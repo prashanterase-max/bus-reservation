@@ -1,0 +1,54 @@
+<div class="max-w-2xl mx-auto py-8 px-4">
+  <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+    <h1 class="text-2xl font-bold">Payment</h1>
+    <p class="text-gray-600">Choose your preferred payment method</p>
+  </div>
+
+  <div class="bg-white p-8 rounded-2xl shadow-sm border">
+    <div *ngIf="error()" class="mb-6 p-4 bg-rose-50 border-l-4 border-rose-500 text-rose-700 text-sm">
+      {{ error() }}
+    </div>
+    <div class="mb-8">
+      <h3 class="font-bold mb-4">Payment Options</h3>
+      <div class="space-y-4">
+        <label class="flex items-center gap-4 p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" [class.border-primary]="paymentMethod === 'UPI'">
+          <input type="radio" name="payment" [(ngModel)]="paymentMethod" value="UPI" class="accent-primary w-5 h-5">
+          <div class="flex-1">
+            <div class="font-bold">UPI</div>
+            <div class="text-xs text-gray-400">Google Pay, PhonePe, Paytm</div>
+          </div>
+        </label>
+        <label class="flex items-center gap-4 p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" [class.border-primary]="paymentMethod === 'CARD'">
+          <input type="radio" name="payment" [(ngModel)]="paymentMethod" value="CARD" class="accent-primary w-5 h-5">
+          <div class="flex-1">
+            <div class="font-bold">Credit / Debit Card</div>
+            <div class="text-xs text-gray-400">Visa, Mastercard, RuPay</div>
+          </div>
+        </label>
+        <label class="flex items-center gap-4 p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" [class.border-primary]="paymentMethod === 'NB'">
+          <input type="radio" name="payment" [(ngModel)]="paymentMethod" value="NB" class="accent-primary w-5 h-5">
+          <div class="flex-1">
+            <div class="font-bold">Net Banking</div>
+            <div class="text-xs text-gray-400">All major Indian banks</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="bg-gray-50 p-6 rounded-xl mb-8">
+      <div class="flex justify-between items-center text-xl font-bold">
+        <span>Amount to Pay:</span>
+        <span class="text-primary">₹{{ bookingService.bookingData()?.totalAmount }}</span>
+      </div>
+    </div>
+
+    <button 
+      (click)="onPay()"
+      [disabled]="loading()"
+      class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+    >
+      <span *ngIf="loading()" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+      {{ loading() ? 'PROCESSING...' : 'PAY NOW' }}
+    </button>
+  </div>
+</div>

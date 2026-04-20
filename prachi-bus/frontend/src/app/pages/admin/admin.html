@@ -1,0 +1,447 @@
+<div class="min-h-screen bg-gray-100 flex">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="w-60 bg-gray-900 text-white flex flex-col fixed h-full z-20">
+    <div class="px-5 py-6 border-b border-gray-700">
+      <p class="text-lg font-black text-primary tracking-tight">PRACHI BUS</p>
+      <p class="text-xs text-gray-400 mt-0.5">Admin Control Panel</p>
+    </div>
+
+    <nav class="flex-1 p-3 space-y-0.5">
+      <button (click)="switchTab('dashboard')" [class.bg-primary]="tab()==='dashboard'"
+        class="w-full text-left px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors flex items-center gap-3 text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Dashboard
+      </button>
+      <button (click)="switchTab('buses')" [class.bg-primary]="tab()==='buses'"
+        class="w-full text-left px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors flex items-center gap-3 text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        Buses
+        <span class="ml-auto bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded-full">{{ buses().length }}</span>
+      </button>
+      <button (click)="switchTab('bookings')" [class.bg-primary]="tab()==='bookings'"
+        class="w-full text-left px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors flex items-center gap-3 text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Bookings
+        <span class="ml-auto bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded-full">{{ bookings().length }}</span>
+      </button>
+      <button (click)="switchTab('users')" [class.bg-primary]="tab()==='users'"
+        class="w-full text-left px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors flex items-center gap-3 text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Users
+        <span class="ml-auto bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded-full">{{ users().length }}</span>
+      </button>
+      <button (click)="switchTab('messages')" [class.bg-primary]="tab()==='messages'"
+        class="w-full text-left px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors flex items-center gap-3 text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Messages
+        <span *ngIf="unreadCount() > 0" class="ml-auto bg-primary text-white text-xs px-1.5 py-0.5 rounded-full">{{ unreadCount() }}</span>
+      </button>    </nav>
+
+    <div class="p-4 border-t border-gray-700">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold uppercase shrink-0">
+          {{ auth.user()?.name?.charAt(0) }}
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm text-white font-medium truncate">{{ auth.user()?.name }}</p>
+          <p class="text-xs text-gray-400">Administrator</p>
+        </div>
+      </div>
+      <button (click)="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition-colors text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="ml-60 flex-1 p-7 overflow-auto">
+
+    <!-- Spinner -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-32">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <div *ngIf="!loading() && tab()==='dashboard'">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">Overview</h2>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Users</p>
+          <p class="text-3xl font-black text-gray-800 mt-1">{{ stats()?.totalUsers ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Buses</p>
+          <p class="text-3xl font-black text-gray-800 mt-1">{{ stats()?.totalBuses ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Bookings</p>
+          <p class="text-3xl font-black text-gray-800 mt-1">{{ stats()?.totalBookings ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Revenue</p>
+          <p class="text-3xl font-black text-primary mt-1">₹{{ stats()?.totalRevenue ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:border-primary transition-colors" (click)="switchTab('messages')">
+          <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Unread Messages</p>
+          <p class="text-3xl font-black mt-1" [class.text-primary]="stats()?.unreadMessages > 0" [class.text-gray-800]="!stats()?.unreadMessages">{{ stats()?.unreadMessages ?? 0 }}</p>
+        </div>
+      </div>
+
+      <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide mb-3">Recent Bookings</h3>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
+            <tr>
+              <th class="px-4 py-3 text-left">PNR</th>
+              <th class="px-4 py-3 text-left">User</th>
+              <th class="px-4 py-3 text-left">Route</th>
+              <th class="px-4 py-3 text-left">Amount</th>
+              <th class="px-4 py-3 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr *ngFor="let b of stats()?.recentBookings" class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-mono text-xs font-semibold">{{ b.pnr }}</td>
+              <td class="px-4 py-3 font-medium">{{ b.user?.name }}</td>
+              <td class="px-4 py-3 text-gray-500">{{ b.bus?.source }} → {{ b.bus?.destination }}</td>
+              <td class="px-4 py-3 font-semibold">₹{{ b.totalAmount }}</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium" [ngClass]="statusBadge(b.status)">{{ b.status }}</span></td>
+            </tr>
+            <tr *ngIf="!stats()?.recentBookings?.length">
+              <td colspan="5" class="px-4 py-8 text-center text-gray-400">No bookings yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── BUSES ─── -->
+    <div *ngIf="!loading() && tab()==='buses'">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-xl font-bold text-gray-800">Manage Buses</h2>
+        <button (click)="openBusModal()" class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition-colors text-sm font-semibold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add Bus
+        </button>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
+            <tr>
+              <th class="px-4 py-3 text-left">Name</th>
+              <th class="px-4 py-3 text-left">Route</th>
+              <th class="px-4 py-3 text-left">Type</th>
+              <th class="px-4 py-3 text-left">Timing</th>
+              <th class="px-4 py-3 text-left">Fare</th>
+              <th class="px-4 py-3 text-left">Seats</th>
+              <th class="px-4 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr *ngFor="let bus of buses()" class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-semibold">{{ bus.name }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ bus.source }} → {{ bus.destination }}</td>
+              <td class="px-4 py-3"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-medium">{{ bus.type }}</span></td>
+              <td class="px-4 py-3 text-gray-500 text-xs">{{ bus.departureTime }} – {{ bus.arrivalTime }}</td>
+              <td class="px-4 py-3 font-semibold">₹{{ bus.fare }}</td>
+              <td class="px-4 py-3">
+                <span [class.text-green-600]="bus.seatsAvailable > 5" [class.text-red-500]="bus.seatsAvailable <= 5" class="font-medium">
+                  {{ bus.seatsAvailable }}/{{ bus.totalSeats }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex gap-2">
+                  <button (click)="openBusModal(bus)" class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg hover:bg-blue-100 transition-colors font-medium">Edit</button>
+                  <button (click)="askDeleteBus(bus._id)" class="text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-lg hover:bg-red-100 transition-colors font-medium">Delete</button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="buses().length === 0">
+              <td colspan="7" class="px-4 py-12 text-center text-gray-400">No buses yet. Click "Add Bus" to create one.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── BOOKINGS ─── -->
+    <div *ngIf="!loading() && tab()==='bookings'">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">All Bookings</h2>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
+            <tr>
+              <th class="px-4 py-3 text-left">PNR</th>
+              <th class="px-4 py-3 text-left">User</th>
+              <th class="px-4 py-3 text-left">Bus / Route</th>
+              <th class="px-4 py-3 text-left">Seats</th>
+              <th class="px-4 py-3 text-left">Amount</th>
+              <th class="px-4 py-3 text-left">Journey</th>
+              <th class="px-4 py-3 text-left">Status</th>
+              <th class="px-4 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr *ngFor="let b of bookings()" class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-mono text-xs font-semibold">{{ b.pnr }}</td>
+              <td class="px-4 py-3">
+                <p class="font-medium">{{ b.user?.name }}</p>
+                <p class="text-gray-400 text-xs">{{ b.user?.email }}</p>
+              </td>
+              <td class="px-4 py-3">
+                <p class="font-medium">{{ b.bus?.name }}</p>
+                <p class="text-gray-400 text-xs">{{ b.bus?.source }} → {{ b.bus?.destination }}</p>
+              </td>
+              <td class="px-4 py-3 text-gray-600 text-xs">{{ b.seatNumbers?.join(', ') }}</td>
+              <td class="px-4 py-3 font-semibold text-primary">₹{{ b.totalAmount }}</td>
+              <td class="px-4 py-3 text-gray-500 text-xs">{{ b.journeyDate | date:'dd MMM yyyy' }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded-full text-xs font-medium" [ngClass]="statusBadge(b.status)">{{ b.status }}</span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex gap-1.5 flex-wrap">
+                  <button *ngIf="b.status !== 'Booked'" (click)="setStatus(b._id, 'Booked')"
+                    class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg hover:bg-green-100 transition-colors font-medium">Confirm</button>
+                  <button *ngIf="b.status !== 'Pending'" (click)="setStatus(b._id, 'Pending')"
+                    class="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-lg hover:bg-yellow-100 transition-colors font-medium">Pending</button>
+                  <button *ngIf="b.status !== 'Cancelled'" (click)="setStatus(b._id, 'Cancelled')"
+                    class="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-lg hover:bg-orange-100 transition-colors font-medium">Cancel</button>
+                  <button (click)="askDeleteBooking(b._id)"
+                    class="text-xs bg-red-50 text-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition-colors font-medium">Delete</button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="bookings().length === 0">
+              <td colspan="8" class="px-4 py-12 text-center text-gray-400">No bookings found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── USERS ─── -->
+    <div *ngIf="!loading() && tab()==='users'">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-xl font-bold text-gray-800">Manage Users</h2>
+        <button (click)="openUserModal()" class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition-colors text-sm font-semibold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add User
+        </button>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
+            <tr>
+              <th class="px-4 py-3 text-left">Name</th>
+              <th class="px-4 py-3 text-left">Email</th>
+              <th class="px-4 py-3 text-left">Phone</th>
+              <th class="px-4 py-3 text-left">Role</th>
+              <th class="px-4 py-3 text-left">Joined</th>
+              <th class="px-4 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr *ngFor="let u of users()" class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-semibold">{{ u.name }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ u.email }}</td>
+              <td class="px-4 py-3 text-gray-500">{{ u.phone || '—' }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded-full text-xs font-medium"
+                  [class.bg-purple-100]="u.role==='admin'" [class.text-purple-700]="u.role==='admin'"
+                  [class.bg-gray-100]="u.role!=='admin'" [class.text-gray-600]="u.role!=='admin'">
+                  {{ u.role }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-gray-400 text-xs">{{ u.createdAt | date:'dd MMM yyyy' }}</td>
+              <td class="px-4 py-3">
+                <div class="flex gap-1.5" *ngIf="u._id !== auth.user()?.id">
+                  <button (click)="openUserModal(u)" class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg hover:bg-blue-100 transition-colors font-medium">Edit</button>
+                  <button (click)="askDeleteUser(u._id)" class="text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-lg hover:bg-red-100 transition-colors font-medium">Delete</button>
+                </div>
+                <span *ngIf="u._id === auth.user()?.id" class="text-xs text-gray-400 italic">You</span>
+              </td>
+            </tr>
+            <tr *ngIf="users().length === 0">
+              <td colspan="6" class="px-4 py-12 text-center text-gray-400">No users found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── MESSAGES ─── -->
+    <div *ngIf="!loading() && tab()==='messages'">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">Contact Messages</h2>
+      <div class="space-y-4">
+        <div *ngFor="let m of messages()"
+          class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 transition-all"
+          [class.border-l-4]="!m.read" [class.border-l-primary]="!m.read">
+          <div class="flex justify-between items-start gap-4">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <p class="font-semibold text-gray-800">{{ m.name }}</p>
+                <span *ngIf="!m.read" class="bg-primary text-white text-xs px-2 py-0.5 rounded-full">New</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-3">{{ m.email }} · {{ m.createdAt | date:'dd MMM yyyy, h:mm a' }}</p>
+              <p class="text-gray-700 text-sm whitespace-pre-wrap">{{ m.message }}</p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button *ngIf="!m.read" (click)="markRead(m._id)"
+                class="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-lg hover:bg-green-100 transition-colors font-medium">Mark Read</button>
+              <button (click)="askDeleteMessage(m._id)"
+                class="text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-lg hover:bg-red-100 transition-colors font-medium">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="messages().length === 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center text-gray-400">
+          No messages yet
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ BUS MODAL ═══ -->
+<div *ngIf="modal()==='bus'" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h3 class="font-bold text-gray-800">{{ editTarget() ? 'Edit Bus' : 'Add New Bus' }}</h3>
+      <button (click)="modal.set(null)" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-6 grid grid-cols-2 gap-4">
+      <div class="col-span-2">
+        <label class="text-xs font-semibold text-gray-500 uppercase">Bus Name *</label>
+        <input [value]="busForm().name" (input)="setBusField('name', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Prachi Express">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Type *</label>
+        <select [value]="busForm().type" (change)="setBusField('type', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+          <option>AC</option><option>Non-AC</option><option>Sleeper</option><option>Seater</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Fare (₹) *</label>
+        <input type="number" [value]="busForm().fare" (input)="setBusField('fare', +$any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Source *</label>
+        <input [value]="busForm().source" (input)="setBusField('source', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="City">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Destination *</label>
+        <input [value]="busForm().destination" (input)="setBusField('destination', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="City">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Departure *</label>
+        <input [value]="busForm().departureTime" (input)="setBusField('departureTime', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="08:00 AM">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Arrival *</label>
+        <input [value]="busForm().arrivalTime" (input)="setBusField('arrivalTime', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="02:00 PM">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Duration *</label>
+        <input [value]="busForm().duration" (input)="setBusField('duration', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="6h 00m">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Total Seats *</label>
+        <input type="number" [value]="busForm().totalSeats" (input)="setBusField('totalSeats', +$any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+      </div>
+    </div>
+    <div class="flex justify-end gap-3 px-6 pb-6">
+      <button (click)="modal.set(null)" class="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 font-medium">Cancel</button>
+      <button (click)="saveBus()" [disabled]="saving()"
+        class="px-5 py-2 text-sm bg-primary text-white rounded-lg hover:bg-rose-700 disabled:opacity-50 font-semibold flex items-center gap-2">
+        <svg *ngIf="saving()" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        {{ saving() ? 'Saving...' : (editTarget() ? 'Update Bus' : 'Add Bus') }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ USER MODAL ═══ -->
+<div *ngIf="modal()==='user'" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h3 class="font-bold text-gray-800">{{ editTarget() ? 'Edit User' : 'Add New User' }}</h3>
+      <button (click)="modal.set(null)" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Full Name *</label>
+        <input [value]="userForm().name" (input)="setUserField('name', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Full name">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Email *</label>
+        <input type="email" [value]="userForm().email" (input)="setUserField('email', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="email@example.com">
+      </div>
+      <div *ngIf="!editTarget()">
+        <label class="text-xs font-semibold text-gray-500 uppercase">Password *</label>
+        <input type="password" [value]="userForm().password" (input)="setUserField('password', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Min 6 characters">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Phone</label>
+        <input [value]="userForm().phone" (input)="setUserField('phone', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Phone number">
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-gray-500 uppercase">Role *</label>
+        <select [value]="userForm().role" (change)="setUserField('role', $any($event.target).value)"
+          class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex justify-end gap-3 px-6 pb-6">
+      <button (click)="modal.set(null)" class="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 font-medium">Cancel</button>
+      <button (click)="saveUser()" [disabled]="saving()"
+        class="px-5 py-2 text-sm bg-primary text-white rounded-lg hover:bg-rose-700 disabled:opacity-50 font-semibold flex items-center gap-2">
+        <svg *ngIf="saving()" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        {{ saving() ? 'Saving...' : (editTarget() ? 'Update User' : 'Create User') }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM DIALOG ═══ -->
+<div *ngIf="confirmFn()" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
+    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+    </div>
+    <p class="text-gray-700 font-medium mb-6">{{ confirmText() }}</p>
+    <div class="flex gap-3 justify-center">
+      <button (click)="confirmFn.set(null)" class="px-5 py-2 border rounded-lg text-sm font-medium hover:bg-gray-50">Cancel</button>
+      <button (click)="runConfirm()" class="px-5 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div *ngIf="toast()" class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-semibold text-white"
+  [class.bg-green-500]="toast()!.ok" [class.bg-red-500]="!toast()!.ok">
+  <svg *ngIf="toast()!.ok" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+  <svg *ngIf="!toast()!.ok" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+  {{ toast()!.msg }}
+</div>

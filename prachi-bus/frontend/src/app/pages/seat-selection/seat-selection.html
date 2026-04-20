@@ -1,0 +1,62 @@
+<div class="max-w-4xl mx-auto py-8 px-4" *ngIf="bus()">
+  <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+    <h1 class="text-2xl font-bold">{{ bus()?.name }}</h1>
+    <p class="text-gray-600">{{ bus()?.source }} → {{ bus()?.destination }} | {{ bus()?.type }}</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <!-- Seat Layout -->
+    <div class="bg-white p-8 rounded-2xl shadow-sm border">
+      <div class="flex justify-between mb-8 items-center border-b pb-4">
+        <h3 class="font-bold text-lg">Select Seats</h3>
+        <div class="flex gap-4 text-xs">
+          <div class="flex items-center gap-1"><div class="w-4 h-4 bg-gray-200 rounded"></div> Available</div>
+          <div class="flex items-center gap-1"><div class="w-4 h-4 bg-primary rounded"></div> Selected</div>
+          <div class="flex items-center gap-1"><div class="w-4 h-4 bg-gray-400 rounded"></div> Booked</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 max-w-[300px] mx-auto">
+        <div *ngFor="let i of [].constructor(40); let idx = index" 
+          (click)="toggleSeat(idx + 1)"
+          class="w-10 h-10 border rounded flex items-center justify-center cursor-pointer transition-colors text-xs font-bold"
+          [class.bg-gray-200]="!isSeatSelected(idx + 1) && !isSeatBooked(idx + 1)"
+          [class.bg-primary]="isSeatSelected(idx + 1)"
+          [class.text-white]="isSeatSelected(idx + 1)"
+          [class.bg-gray-400]="isSeatBooked(idx + 1)"
+          [class.cursor-not-allowed]="isSeatBooked(idx + 1)"
+        >
+          {{ idx + 1 }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Summary -->
+    <div class="bg-white p-8 rounded-2xl shadow-sm border h-fit">
+      <h3 class="font-bold text-lg mb-6 border-b pb-4">Booking Summary</h3>
+      
+      <div class="space-y-4 mb-8">
+        <div class="flex justify-between">
+          <span class="text-gray-600">Selected Seats:</span>
+          <span class="font-bold">{{ selectedSeats().join(', ') || 'None' }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Total Seats:</span>
+          <span class="font-bold">{{ selectedSeats().length }}</span>
+        </div>
+        <div class="flex justify-between text-xl font-bold border-t pt-4">
+          <span>Total Fare:</span>
+          <span class="text-primary">₹{{ selectedSeats().length * bus()!.fare }}</span>
+        </div>
+      </div>
+
+      <button 
+        (click)="proceedToDetails()"
+        [disabled]="selectedSeats().length === 0"
+        class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        PROCEED TO PASSENGER DETAILS
+      </button>
+    </div>
+  </div>
+</div>
