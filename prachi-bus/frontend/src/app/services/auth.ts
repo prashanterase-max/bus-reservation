@@ -17,7 +17,7 @@ export interface User {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'https://your-backend.vercel.app/api/auth';
+  private apiUrl = 'https://bus-reservation-red.vercel.app/api/auth';
 
   user = signal<User | null>(this.getUserFromStorage());
   token = signal<string | null>(localStorage.getItem('token'));

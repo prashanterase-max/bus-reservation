@@ -28,7 +28,7 @@ export class ContactComponent {
     this.loading.set(true);
     this.error.set(null);
     try {
-      await firstValueFrom(this.http.post('https://your-backend.vercel.app/api/contact', {
+      await firstValueFrom(this.http.post('https://bus-reservation-red.vercel.app/api/contact', {
         name: this.name, email: this.email, message: this.message
       }));
       this.success.set(true);

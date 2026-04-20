@@ -22,7 +22,7 @@ export interface Bus {
 })
 export class BusService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://your-backend.vercel.app/api/buses';
+  private apiUrl = 'https://bus-reservation-red.vercel.app/api/buses';
 
   buses = signal<Bus[]>([]);
   loading = signal<boolean>(false);
