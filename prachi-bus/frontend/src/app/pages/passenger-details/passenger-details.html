@@ -1,28 +1,29 @@
-<div class="max-w-4xl mx-auto py-8 px-4">
-  <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
-    <h1 class="text-2xl font-bold">Passenger Details</h1>
-    <p class="text-gray-600">Please enter details for all {{ bookingService.bookingData()?.selectedSeats?.length }} passengers</p>
+<div class="max-w-4xl mx-auto py-6 px-4">
+  <div class="bg-white p-4 rounded-xl shadow-sm border mb-6">
+    <h1 class="text-xl font-bold">Passenger Details</h1>
+    <p class="text-gray-500 text-sm">Enter details for {{ bookingService.bookingData()?.selectedSeats?.length }} passenger(s)</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="md:col-span-2 space-y-6">
-      <div *ngFor="let passenger of passengers; let i = index" class="bg-white p-6 rounded-xl shadow-sm border">
-        <h3 class="font-bold mb-4 border-b pb-2">Passenger {{ i + 1 }} - Seat {{ bookingService.bookingData()?.selectedSeats?.[i] }}</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="md:col-span-1">
-            <label class="block text-sm font-medium mb-1">Name</label>
-            <input type="text" [(ngModel)]="passenger.name" placeholder="Full Name" class="w-full p-2 border rounded focus:ring-1 focus:ring-primary outline-none">
+  <div class="flex flex-col md:grid md:grid-cols-3 gap-6">
+    <div class="md:col-span-2 space-y-4">
+      <div *ngFor="let passenger of passengers; let i = index" class="bg-white p-5 rounded-xl shadow-sm border">
+        <h3 class="font-bold mb-3 border-b pb-2 text-sm">Passenger {{ i + 1 }} — Seat {{ bookingService.bookingData()?.selectedSeats?.[i] }}</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-1">
+            <label class="block text-xs font-medium mb-1 text-gray-600">Full Name</label>
+            <input type="text" [(ngModel)]="passenger.name" placeholder="Name"
+              class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm">
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Age</label>
-            <input type="number" [(ngModel)]="passenger.age" placeholder="Age" class="w-full p-2 border rounded focus:ring-1 focus:ring-primary outline-none">
+            <label class="block text-xs font-medium mb-1 text-gray-600">Age</label>
+            <input type="number" [(ngModel)]="passenger.age" placeholder="Age"
+              class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm">
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Gender</label>
-            <select [(ngModel)]="passenger.gender" class="w-full p-2 border rounded focus:ring-1 focus:ring-primary outline-none">
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
+            <label class="block text-xs font-medium mb-1 text-gray-600">Gender</label>
+            <select [(ngModel)]="passenger.gender"
+              class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm">
+              <option>Male</option><option>Female</option><option>Other</option>
             </select>
           </div>
         </div>
@@ -30,26 +31,16 @@
     </div>
 
     <!-- Summary -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border h-fit">
-      <h3 class="font-bold text-lg mb-4 border-b pb-2">Journey Details</h3>
-      <div class="space-y-3 text-sm mb-6">
-        <div class="flex justify-between">
-          <span class="text-gray-500">Bus:</span>
-          <span class="font-bold">{{ bookingService.bookingData()?.bus?.name }}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-500">Route:</span>
-          <span class="font-bold">{{ bookingService.bookingData()?.bus?.source }} → {{ bookingService.bookingData()?.bus?.destination }}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-500">Fare:</span>
-          <span class="font-bold text-primary text-lg">₹{{ bookingService.bookingData()?.totalAmount }}</span>
-        </div>
+    <div class="bg-white p-5 rounded-xl shadow-sm border h-fit">
+      <h3 class="font-bold mb-3 border-b pb-2">Journey Summary</h3>
+      <div class="space-y-2 text-sm mb-5">
+        <div class="flex justify-between"><span class="text-gray-500">Bus</span><span class="font-bold">{{ bookingService.bookingData()?.bus?.name }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Route</span><span class="font-bold text-right">{{ bookingService.bookingData()?.bus?.source }} → {{ bookingService.bookingData()?.bus?.destination }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Seats</span><span class="font-bold">{{ bookingService.bookingData()?.selectedSeats?.join(', ') }}</span></div>
+        <div class="flex justify-between border-t pt-2"><span class="font-bold">Total</span><span class="font-bold text-primary text-base">₹{{ bookingService.bookingData()?.totalAmount }}</span></div>
       </div>
-      <button 
-        (click)="proceedToPayment()"
-        class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-rose-700 transition-colors"
-      >
+      <button (click)="proceedToPayment()"
+        class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-rose-700 transition-colors text-sm">
         PROCEED TO PAYMENT
       </button>
     </div>

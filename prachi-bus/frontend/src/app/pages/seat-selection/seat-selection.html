@@ -1,60 +1,61 @@
-<div class="max-w-4xl mx-auto py-8 px-4" *ngIf="bus()">
-  <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
-    <h1 class="text-2xl font-bold">{{ bus()?.name }}</h1>
-    <p class="text-gray-600">{{ bus()?.source }} → {{ bus()?.destination }} | {{ bus()?.type }}</p>
+<div class="max-w-4xl mx-auto py-6 px-4" *ngIf="bus()">
+  <div class="bg-white p-4 rounded-xl shadow-sm border mb-6">
+    <h1 class="text-xl font-bold">{{ bus()?.name }}</h1>
+    <p class="text-gray-500 text-sm">{{ bus()?.source }} → {{ bus()?.destination }} | {{ bus()?.type }}</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+  <div class="flex flex-col md:grid md:grid-cols-2 gap-6">
     <!-- Seat Layout -->
-    <div class="bg-white p-8 rounded-2xl shadow-sm border">
-      <div class="flex justify-between mb-8 items-center border-b pb-4">
-        <h3 class="font-bold text-lg">Select Seats</h3>
-        <div class="flex gap-4 text-xs">
+    <div class="bg-white p-5 rounded-2xl shadow-sm border">
+      <div class="flex justify-between mb-5 items-center border-b pb-3 flex-wrap gap-2">
+        <h3 class="font-bold">Select Seats</h3>
+        <div class="flex gap-3 text-xs">
           <div class="flex items-center gap-1"><div class="w-4 h-4 bg-gray-200 rounded"></div> Available</div>
           <div class="flex items-center gap-1"><div class="w-4 h-4 bg-primary rounded"></div> Selected</div>
           <div class="flex items-center gap-1"><div class="w-4 h-4 bg-gray-400 rounded"></div> Booked</div>
         </div>
       </div>
-
-      <div class="grid grid-cols-4 gap-4 max-w-[300px] mx-auto">
-        <div *ngFor="let i of [].constructor(40); let idx = index" 
+      <div class="grid grid-cols-5 sm:grid-cols-6 gap-2 max-w-xs mx-auto">
+        <div *ngFor="let i of [].constructor(40); let idx = index"
           (click)="toggleSeat(idx + 1)"
-          class="w-10 h-10 border rounded flex items-center justify-center cursor-pointer transition-colors text-xs font-bold"
+          class="w-10 h-10 border rounded flex items-center justify-center cursor-pointer transition-colors text-xs font-bold select-none"
           [class.bg-gray-200]="!isSeatSelected(idx + 1) && !isSeatBooked(idx + 1)"
           [class.bg-primary]="isSeatSelected(idx + 1)"
           [class.text-white]="isSeatSelected(idx + 1)"
           [class.bg-gray-400]="isSeatBooked(idx + 1)"
-          [class.cursor-not-allowed]="isSeatBooked(idx + 1)"
-        >
+          [class.cursor-not-allowed]="isSeatBooked(idx + 1)">
           {{ idx + 1 }}
         </div>
       </div>
     </div>
 
     <!-- Booking Summary -->
-    <div class="bg-white p-8 rounded-2xl shadow-sm border h-fit">
-      <h3 class="font-bold text-lg mb-6 border-b pb-4">Booking Summary</h3>
-      
-      <div class="space-y-4 mb-8">
+    <div class="bg-white p-5 rounded-2xl shadow-sm border">
+      <h3 class="font-bold mb-4 border-b pb-3">Booking Summary</h3>
+      <div class="space-y-3 mb-6 text-sm">
         <div class="flex justify-between">
-          <span class="text-gray-600">Selected Seats:</span>
+          <span class="text-gray-500">Bus</span>
+          <span class="font-bold">{{ bus()?.name }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Route</span>
+          <span class="font-bold">{{ bus()?.source }} → {{ bus()?.destination }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Departure</span>
+          <span class="font-bold">{{ bus()?.departureTime }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Selected Seats</span>
           <span class="font-bold">{{ selectedSeats().join(', ') || 'None' }}</span>
         </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">Total Seats:</span>
-          <span class="font-bold">{{ selectedSeats().length }}</span>
-        </div>
-        <div class="flex justify-between text-xl font-bold border-t pt-4">
-          <span>Total Fare:</span>
+        <div class="flex justify-between text-base font-bold border-t pt-3">
+          <span>Total Fare</span>
           <span class="text-primary">₹{{ selectedSeats().length * bus()!.fare }}</span>
         </div>
       </div>
-
-      <button 
-        (click)="proceedToDetails()"
-        [disabled]="selectedSeats().length === 0"
-        class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      <button (click)="proceedToDetails()" [disabled]="selectedSeats().length === 0"
+        class="w-full bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm">
         PROCEED TO PASSENGER DETAILS
       </button>
     </div>

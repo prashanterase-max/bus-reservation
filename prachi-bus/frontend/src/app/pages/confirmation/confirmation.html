@@ -1,69 +1,61 @@
-<div class="max-w-3xl mx-auto py-12 px-4 text-center">
-  <div class="mb-8">
-    <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-      </svg>
+<div class="max-w-2xl mx-auto py-8 px-4 text-center">
+  <div class="mb-6">
+    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+      <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
     </div>
-    <h1 class="text-3xl font-bold text-gray-800">Booking Confirmed!</h1>
-    <p class="text-gray-600 mt-2">Your ticket has been sent to your email and phone.</p>
+    <h1 class="text-2xl font-bold text-gray-800">Booking Confirmed!</h1>
+    <p class="text-gray-500 mt-1 text-sm">Your ticket has been booked successfully.</p>
   </div>
 
-  <div class="bg-white rounded-2xl shadow-xl border overflow-hidden text-left mb-8">
-    <div class="bg-primary text-white p-6 flex justify-between items-center">
+  <div class="bg-white rounded-2xl shadow-xl border overflow-hidden text-left mb-6">
+    <div class="bg-primary text-white p-5 flex justify-between items-center">
       <div>
         <div class="text-rose-200 text-xs font-bold uppercase tracking-wider">PNR Number</div>
-        <div class="text-2xl font-bold">{{ pnr() }}</div>
+        <div class="text-xl font-bold">{{ pnr() }}</div>
       </div>
       <div class="text-right">
         <div class="text-rose-200 text-xs font-bold uppercase tracking-wider">Status</div>
-        <div class="text-xl font-bold">CONFIRMED</div>
+        <div class="text-lg font-bold">CONFIRMED</div>
       </div>
     </div>
 
-    <div class="p-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 border-b pb-8">
+    <div class="p-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5 border-b pb-5">
         <div>
-          <h3 class="text-gray-400 text-xs font-bold uppercase mb-2">Bus Details</h3>
-          <div class="font-bold text-lg text-gray-800">{{ bookingDetails()?.bus?.name }}</div>
-          <div class="text-gray-600 text-sm">{{ bookingDetails()?.bus?.type }}</div>
+          <p class="text-gray-400 text-xs font-bold uppercase mb-1">Bus</p>
+          <p class="font-bold text-gray-800">{{ bookingDetails()?.bus?.name }}</p>
+          <p class="text-gray-500 text-sm">{{ bookingDetails()?.bus?.type }}</p>
         </div>
         <div>
-          <h3 class="text-gray-400 text-xs font-bold uppercase mb-2">Route</h3>
-          <div class="font-bold text-lg text-gray-800">{{ bookingDetails()?.bus?.source }} → {{ bookingDetails()?.bus?.destination }}</div>
-          <div class="text-gray-600 text-sm">{{ bookingDetails()?.bus?.departureTime }} Departure</div>
+          <p class="text-gray-400 text-xs font-bold uppercase mb-1">Route</p>
+          <p class="font-bold text-gray-800">{{ bookingDetails()?.bus?.source }} → {{ bookingDetails()?.bus?.destination }}</p>
+          <p class="text-gray-500 text-sm">Departure: {{ bookingDetails()?.bus?.departureTime }}</p>
         </div>
       </div>
 
-      <div class="mb-8 border-b pb-8">
-        <h3 class="text-gray-400 text-xs font-bold uppercase mb-4">Passenger Details</h3>
-        <div class="space-y-4">
-          <div *ngFor="let p of bookingDetails()?.passengerDetails; let i = index" class="flex justify-between items-center">
-            <div>
-              <div class="font-bold text-gray-800">{{ p.name }} ({{ p.age }}, {{ p.gender }})</div>
-              <div class="text-gray-400 text-xs">Seat {{ bookingDetails()?.selectedSeats?.[i] }}</div>
-            </div>
+      <div class="mb-5 border-b pb-5">
+        <p class="text-gray-400 text-xs font-bold uppercase mb-3">Passengers</p>
+        <div class="space-y-2">
+          <div *ngFor="let p of bookingDetails()?.passengerDetails; let i = index" class="flex justify-between text-sm">
+            <span class="font-medium text-gray-800">{{ p.name }} ({{ p.age }}, {{ p.gender }})</span>
+            <span class="text-gray-400">Seat {{ bookingDetails()?.selectedSeats?.[i] }}</span>
           </div>
         </div>
       </div>
 
       <div class="flex justify-between items-center">
         <div>
-          <div class="text-gray-400 text-xs font-bold uppercase mb-1">Total Paid</div>
-          <div class="text-2xl font-bold text-primary">₹{{ bookingDetails()?.totalAmount }}</div>
+          <p class="text-gray-400 text-xs font-bold uppercase mb-1">Total Paid</p>
+          <p class="text-2xl font-bold text-primary">₹{{ bookingDetails()?.totalAmount }}</p>
         </div>
-        <button 
-          (click)="printTicket()"
-          class="bg-gray-800 text-white px-6 py-2 rounded-lg font-bold hover:bg-gray-900 transition-colors flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-          </svg>
-          Print Ticket
+        <button (click)="printTicket()"
+          class="bg-gray-800 text-white px-5 py-2 rounded-lg font-bold hover:bg-gray-900 transition-colors flex items-center gap-2 text-sm">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print
         </button>
       </div>
     </div>
   </div>
 
-  <button routerLink="/" class="text-primary font-bold hover:underline">Book another ticket</button>
+  <a routerLink="/" class="text-primary font-bold hover:underline text-sm">← Book another ticket</a>
 </div>

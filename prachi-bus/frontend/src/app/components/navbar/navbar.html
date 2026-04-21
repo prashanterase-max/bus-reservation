@@ -1,39 +1,59 @@
 <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a routerLink="/" class="text-2xl font-black text-primary tracking-tighter hover:scale-105 transition-transform">PRACHI BUS</a>
-    
+    <a routerLink="/" class="text-2xl font-black text-primary tracking-tighter">PRACHI BUS</a>
+
+    <!-- Desktop -->
     <div class="hidden md:flex gap-8 items-center font-bold text-gray-600">
       <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}" class="hover:text-primary transition-colors">Home</a>
       <a routerLink="/about" routerLinkActive="text-primary" class="hover:text-primary transition-colors">About</a>
       <a routerLink="/services" routerLinkActive="text-primary" class="hover:text-primary transition-colors">Services</a>
       <a routerLink="/contact" routerLinkActive="text-primary" class="hover:text-primary transition-colors">Contact</a>
-      
+
       <ng-container *ngIf="!authService.isAuthenticated()">
         <a routerLink="/login" class="hover:text-primary transition-colors">Login</a>
-        <button routerLink="/register" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-rose-700 transition-all hover:shadow-lg active:scale-95">Register</button>
+        <a routerLink="/register" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-rose-700 transition-all">Register</a>
       </ng-container>
 
       <ng-container *ngIf="authService.isAuthenticated()">
-        <ng-container *ngIf="authService.user()?.role === 'admin'">
-          <a routerLink="/admin" routerLinkActive="text-primary" class="hover:text-primary transition-colors">Admin Panel</a>
-        </ng-container>
+        <a *ngIf="authService.user()?.role === 'admin'" routerLink="/admin" routerLinkActive="text-primary" class="hover:text-primary transition-colors">Admin Panel</a>
         <ng-container *ngIf="authService.user()?.role !== 'admin'">
           <a routerLink="/dashboard" routerLinkActive="text-primary" class="hover:text-primary transition-colors">Dashboard</a>
           <a routerLink="/my-bookings" routerLinkActive="text-primary" class="hover:text-primary transition-colors">My Bookings</a>
         </ng-container>
         <div class="flex items-center gap-3 pl-4 border-l border-gray-100">
-          <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-primary text-xs font-black uppercase">
-            {{ authService.user()?.name?.charAt(0) }}
-          </div>
+          <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-primary text-xs font-black uppercase">{{ authService.user()?.name?.charAt(0) }}</div>
           <button (click)="logout()" class="text-sm text-gray-400 hover:text-rose-500 transition-colors">Logout</button>
         </div>
       </ng-container>
     </div>
 
-    <button class="md:hidden text-gray-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
+    <!-- Hamburger -->
+    <button (click)="menuOpen.set(!menuOpen())" class="md:hidden text-gray-600 p-1">
+      <svg *ngIf="!menuOpen()" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg *ngIf="menuOpen()" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="menuOpen()" class="md:hidden border-t bg-white px-4 py-4 space-y-1 font-bold text-gray-700">
+    <a routerLink="/" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">Home</a>
+    <a routerLink="/about" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">About</a>
+    <a routerLink="/services" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">Services</a>
+    <a routerLink="/contact" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">Contact</a>
+
+    <div class="border-t pt-3 mt-2 space-y-1">
+      <ng-container *ngIf="!authService.isAuthenticated()">
+        <a routerLink="/login" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">Login</a>
+        <a routerLink="/register" (click)="menuOpen.set(false)" class="block py-2.5 text-primary">Register</a>
+      </ng-container>
+      <ng-container *ngIf="authService.isAuthenticated()">
+        <a *ngIf="authService.user()?.role === 'admin'" routerLink="/admin" (click)="menuOpen.set(false)" class="block py-2.5 text-primary">Admin Panel</a>
+        <ng-container *ngIf="authService.user()?.role !== 'admin'">
+          <a routerLink="/dashboard" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">Dashboard</a>
+          <a routerLink="/my-bookings" (click)="menuOpen.set(false)" class="block py-2.5 hover:text-primary transition-colors">My Bookings</a>
+        </ng-container>
+        <button (click)="logout()" class="block py-2.5 text-rose-500 w-full text-left">Logout</button>
+      </ng-container>
+    </div>
   </div>
 </nav>

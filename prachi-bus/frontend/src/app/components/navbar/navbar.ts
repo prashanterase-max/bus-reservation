@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent {
   public authService = inject(AuthService);
+  menuOpen = signal(false);
 
   logout() {
+    this.menuOpen.set(false);
     this.authService.logout();
   }
 }
